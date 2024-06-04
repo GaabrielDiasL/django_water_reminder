@@ -24,15 +24,16 @@ class WaterIngestedViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='daily-status/(?P<user_id>[^/.]+)')
     def daily_status(self, request, user_id=None):
         date_str = request.query_params.get('date')
+        user = User.objects.get(id=user_id)
+        
         if date_str:
             try:
                 date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
             except ValueError:
                 raise ValidationError("Date format should be YYYY-MM-DD")
         else:
-            date = timezone.now().date()
+            date = datetime.date.today()
 
-        user = User.objects.get(id=user_id)
         total_ingested = WaterIngested.objects.filter(user=user, date=date).aggregate(total_volume=Sum('amount_ml__volume'))['total_volume'] or 0
         remaining = user.daily_target - total_ingested
         percentage_consumed = round((total_ingested / user.daily_target) * 100, 2) if user.daily_target > 0 else 0
@@ -43,7 +44,7 @@ class WaterIngestedViewSet(viewsets.ModelViewSet):
                 'remaining': remaining,
                 'daily_target_met': total_ingested >= user.daily_target,
                 'daily_target': user.daily_target,
-                'date': date,
+                'date': date.isoformat(),
                 'percentage_consumed': percentage_consumed,
             }
         )
