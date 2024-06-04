@@ -22,6 +22,7 @@ from water_tracker import views
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'wateringested', views.WaterIngestedViewSet)
+router.register(r'cupsizes', views.CupSizeViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

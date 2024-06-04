@@ -1,0 +1,26 @@
+[
+    {
+        "model": "water_tracker.cupsize",
+        "pk": 1,
+        "fields": {
+            "name": "Copo pequeno",
+            "volume": 250
+        }
+    },
+    {
+        "model": "water_tracker.cupsize",
+        "pk": 2,
+        "fields": {
+            "name": "Copo médio",
+            "volume": 350
+        }
+    },
+    {
+        "model": "water_tracker.cupsize",
+        "pk": 3,
+        "fields": {
+            "name": "Garrafa média",
+            "volume": 500
+        }
+    }
+]
