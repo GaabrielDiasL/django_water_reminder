@@ -35,7 +35,8 @@ class WaterIngestedViewSet(viewsets.ModelViewSet):
             date = datetime.date.today()
 
         total_ingested = WaterIngested.objects.filter(user=user, date=date).aggregate(total_volume=Sum('amount_ml__volume'))['total_volume'] or 0
-        remaining = user.daily_target - total_ingested
+        # Remaining should never be negative
+        remaining = max(user.daily_target - total_ingested, 0)
         percentage_consumed = round((total_ingested / user.daily_target) * 100, 2) if user.daily_target > 0 else 0
 
         return Response(

@@ -14,11 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
 class WaterIngestedSerializer(serializers.ModelSerializer):
     volume = serializers.SerializerMethodField()
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    amount_ml = serializers.PrimaryKeyRelatedField(queryset=CupSize.objects.all())
     user_details = UserSerializer(source='user', read_only=True)
 
     class Meta:
         model = WaterIngested
-        fields = ['id', 'user', 'user_details', 'amount_ml', 'volume', 'date']
+        fields = ['id', 'user', 'amount_ml', 'volume', 'date', 'user_details']
 
     def get_volume(self, obj):
         return obj.amount_ml.volume
